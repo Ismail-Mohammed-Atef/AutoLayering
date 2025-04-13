@@ -16,10 +16,6 @@ This is a custom AutoCAD plugin that streamlines the task of assigning selected 
 - **Architecture**: MVVM Design Pattern  
 - **Language**: C#
 
-## 🎥 Demo
-
-<video src="assets/demo.mp4" controls width="100%"></video>
-
 ## License  
 This project is licensed under the MIT License.
 
