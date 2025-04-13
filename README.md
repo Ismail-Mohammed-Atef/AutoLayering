@@ -1,54 +1,28 @@
-🔧 AutoCAD Layer Matcher Plugin
-A custom AutoCAD plugin built with WPF and the AutoCAD .NET API to streamline the process of assigning selected graphical objects to specific layers—enhancing speed, accuracy, and consistency in CAD workflows.
+# 🔧 AutoCAD Layer Matcher Plugin
 
-🎯 Purpose
-Managing layer standards in detailed or large-scale AutoCAD projects can be a repetitive and error-prone task. This plugin introduces a more efficient method by allowing users to:
+## Overview  
+This is a custom AutoCAD plugin that streamlines the task of assigning selected graphical objects to a specified layer. Designed for CAD professionals, the plugin integrates a modern WPF interface with the AutoCAD .NET API to reduce manual effort and improve layer management efficiency in complex drawings.
 
-Select multiple objects in the AutoCAD drawing
+## Features  
+- 🎯 **Layer Assignment Automation**: Quickly match selected objects to a chosen layer.  
+- 🖥️ **Responsive WPF Interface**: Intuitive and user-friendly UI for smooth interaction.  
+- 🔄 **Seamless AutoCAD Integration**: Works directly within the AutoCAD environment using its .NET API.  
+- 🧱 **MVVM Architecture**: Clean separation of concerns for maintainability and scalability.  
+- ⚡ **Improved Productivity**: Saves time and reduces errors in layer standardization workflows.
 
-Quickly match them to a specified layer using a custom interface
+## Technologies Used  
+- **Frontend/UI**: Windows Presentation Foundation (WPF)  
+- **Backend Integration**: AutoCAD .NET API  
+- **Architecture**: MVVM Design Pattern  
+- **Language**: C#
 
-💡 Features
-🖱️ Interactive UI: Built with WPF for a clean and responsive user experience
+## 🎥 Demo
 
-⚙️ AutoCAD Integration: Uses the AutoCAD .NET API for seamless interaction with drawings
+<video src="assets/demo.mp4" controls width="100%"></video>
 
-🧱 MVVM Architecture: Ensures maintainability and clear separation of concerns
+## License  
+This project is licensed under the MIT License.
 
-🚀 Getting Started
-Requirements
-AutoCAD (compatible version)
-
-.NET Framework (target version used in the plugin)
-
-Visual Studio (for development or customization)
-
-Installation
-Clone or download the repository
-
-Open and build the solution in Visual Studio
-
-Launch AutoCAD and run NETLOAD
-
-Select the generated .dll file
-
-Run the custom command (e.g., MatchLayerTool) to activate the plugin
-
-🧪 How It Works
-Launch the plugin via the custom command
-
-Use the interface to choose a target layer
-
-Select the objects you want to reassign
-
-Click to apply the changes instantly
-
-📸 Demo (Optional)
-Add screenshots or a demo video here to showcase the UI and workflow.
-
-📦 Technologies Used
-WPF (.NET)
-
-AutoCAD .NET API
-
-MVVM Design Pattern
+## Contact  
+For support or inquiries, feel free to reach out at:  
+📧 **ismail.mohammed.atef@gmail.com**
