@@ -1,0 +1,306 @@
+﻿<Window x:Class="WpfCadApi.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfCadApi.View"
+        mc:Ignorable="d"
+        Title="AutoCAD API Manager" 
+        Height="544" Width="390"
+        WindowStartupLocation="CenterScreen"
+        
+        Background="#FFFFFF"
+        FontFamily="Segoe UI">
+
+    <Window.Resources>
+        <!-- Color Palette -->
+        <Color x:Key="PrimaryColor">#0078D7</Color>
+        <Color x:Key="PrimaryDarkColor">#005A9E</Color>
+        <Color x:Key="PrimaryLightColor">#E5F1FB</Color>
+        <Color x:Key="AccentColor">#FFAA44</Color>
+        <Color x:Key="DarkGray">#333333</Color>
+        <Color x:Key="MediumGray">#666666</Color>
+        <Color x:Key="LightGray">#F5F5F5</Color>
+        <Color x:Key="BorderGray">#DDDDDD</Color>
+
+        <!-- Brushes -->
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+        <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDarkColor}"/>
+        <SolidColorBrush x:Key="PrimaryLightBrush" Color="{StaticResource PrimaryLightColor}"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+        <SolidColorBrush x:Key="DarkGrayBrush" Color="{StaticResource DarkGray}"/>
+        <SolidColorBrush x:Key="MediumGrayBrush" Color="{StaticResource MediumGray}"/>
+        <SolidColorBrush x:Key="LightGrayBrush" Color="{StaticResource LightGray}"/>
+        <SolidColorBrush x:Key="BorderGrayBrush" Color="{StaticResource BorderGray}"/>
+
+        <!-- Text Styles -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource DarkGrayBrush}"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <Style x:Key="HeaderText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="SectionHeader" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,12,0,8"/>
+        </Style>
+
+        <Style x:Key="LargeNumber" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,4,0,0"/>
+        </Style>
+
+        <!-- ComboBox Style -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderGrayBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+            <Setter Property="Padding" Value="6,0,0,0"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkGrayBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="border" 
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="3"
+                            SnapsToDevicePixels="True">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="20"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Content Presenter for selected item -->
+                                    <ContentPresenter Grid.Column="0"
+                                            Margin="{TemplateBinding Padding}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+
+                                    <!-- Dropdown Arrow -->
+                                    <Path Grid.Column="1" 
+                                  Fill="{StaticResource MediumGrayBrush}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Data="M0,0 L4,4 8,0 Z"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Toggle Button to open/close dropdown -->
+                            <ToggleButton x:Name="ToggleButton"
+                                 Grid.ColumnSpan="2"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                 ClickMode="Press"/>
+
+                            <!-- Popup for dropdown items -->
+                            <Popup x:Name="Popup"
+                           Placement="Bottom"
+                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                           AllowsTransparency="True"
+                           Focusable="False"
+                           PopupAnimation="Slide">
+                                <Border x:Name="DropDownBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="1"
+                                BorderBrush="{StaticResource BorderGrayBrush}"
+                                CornerRadius="0,0,3,3"
+                                MinWidth="{TemplateBinding ActualWidth}"
+                                MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <ScrollViewer>
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                                <Setter TargetName="DropDownBorder" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Button Style -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="MinWidth" Value="96"/>
+            <Setter Property="Margin" Value="8,0,0,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter x:Name="contentPresenter" 
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource PrimaryDarkBrush}"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource PrimaryDarkBrush}"/>
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#E0E0E0"/>
+                                <Setter Property="Foreground" Value="#A0A0A0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderGrayBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{StaticResource MediumGrayBrush}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+        </Style>
+
+        <!-- Card Style -->
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderGrayBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Margin" Value="0,8,0,0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" 
+                                      ShadowDepth="1" 
+                                      Opacity="0.1" 
+                                      Direction="270"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Modern Header with logo -->
+        <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" Padding="16">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <!-- AutoCAD Logo -->
+                <Path Width="24" Height="24" Stretch="Uniform" Fill="White" Margin="0,0,12,0"
+                      Data="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M12,20c-4.41,0-8-3.59-8-8s3.59-8,8-8s8,3.59,8,8S16.41,20,12,20z"/>
+                <TextBlock Text="AUTOCAD AutoLayer" Style="{StaticResource HeaderText}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content Area -->
+        <ScrollViewer Grid.Row="1" Padding="16" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Selection Card -->
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="ELEMENT SELECTION" Style="{StaticResource SectionHeader}"/>
+
+                        <TextBlock Text="Select AutoCAD Element"/>
+                        <ComboBox Name="ComboBoxGraphicalObjects"
+                                  ItemsSource="{Binding AutoCadObjects}"
+                                  SelectedItem="{Binding SelectedObject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock Text="Assign to Layer"/>
+                        <ComboBox Name="ComboBoxLayers"
+                                  ItemsSource="{Binding AutoCadLayers}"
+                                  SelectedItem="{Binding SelectedLayer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Statistics Card -->
+                <Border Style="{StaticResource CardStyle}" Margin="0,16,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Selected Elements -->
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="SELECTED ELEMENTS" Style="{StaticResource SectionHeader}"/>
+                            <TextBlock Text="{Binding CountOfElements, UpdateSourceTrigger=PropertyChanged}" 
+                                       Style="{StaticResource LargeNumber}"/>
+                            <TextBlock Text="currently selected" HorizontalAlignment="Center" 
+                                       Foreground="{StaticResource MediumGrayBrush}"/>
+                        </StackPanel>
+
+                        <!-- Elements in Layer -->
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="IN SELECTED LAYER" Style="{StaticResource SectionHeader}"/>
+                            <TextBlock Text="{Binding CountOfLayeredElements, UpdateSourceTrigger=PropertyChanged}" 
+                                       Style="{StaticResource LargeNumber}"/>
+                            <TextBlock Text="on selected layer" HorizontalAlignment="Center" 
+                                       Foreground="{StaticResource MediumGrayBrush}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Action Buttons -->
+        <Border Grid.Row="2" Background="{StaticResource LightGrayBrush}" Padding="16" 
+                BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderGrayBrush}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Name="Cancel" Content="CANCEL" 
+                        Style="{StaticResource SecondaryButton}"
+                        Click="Cancel_Click"/>
+                <Button Name="Create" Content="APPLY" 
+                        Command="{Binding CreateBtnCmd}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
